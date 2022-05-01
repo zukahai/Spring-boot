@@ -1,5 +1,7 @@
 package com.haizuka.api;
 
+import java.util.List;
+
 import com.haizuka.service.impl.IHaizukaService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +41,8 @@ public class LinhAPI {
   }
 
   @GetMapping(value = "/linh")
-  public String show(@RequestBody HaiZukaDTO model) {
-    return model.toString();
+  public List<HaiZukaDTO> show() {
+    return haizukaService.findAll();
   }
 
   @PostMapping(value = "/linh")
@@ -55,7 +57,7 @@ public class LinhAPI {
   }
 
   @DeleteMapping(value = "/linh")
-  public void delete(@RequestBody HaiZukaDTO[] arr) {
-
+  public void delete(@RequestBody int[] ids) {
+    haizukaService.delete(ids);
   }
 }
