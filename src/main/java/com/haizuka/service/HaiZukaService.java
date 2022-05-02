@@ -1,6 +1,7 @@
 package com.haizuka.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -47,6 +48,24 @@ public class HaiZukaService implements IHaizukaService{
 		for (int id : ids) {
 			haizukaRepository.deleteById(id);
 		}
+	}
+
+	@Override
+	public List<HaiZukaDTO> findAll(Pageable pageable) {
+		// TODO Auto-generated method stub
+		List <HaiZukaDTO> haiZukaDTOs = new ArrayList<HaiZukaDTO>();
+		List <HaizukaEntity> entities = haizukaRepository.findAll(pageable).getContent();
+		for (HaizukaEntity entity : entities) {
+			HaiZukaDTO dto = haizukaConverter.toDTO(entity);
+			haiZukaDTOs.add(dto);
+		}
+		return haiZukaDTOs;
+	}
+
+	@Override
+	public int totalItem() {
+		// TODO Auto-generated method stub
+		return (int) haizukaRepository.count();
 	}
 
 	@Override

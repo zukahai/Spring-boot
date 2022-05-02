@@ -2,15 +2,21 @@ package com.haizuka.api;
 
 import java.util.List;
 
+import com.haizuka.api.output.HaizukaOutput;
 import com.haizuka.service.impl.IHaizukaService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -36,8 +42,14 @@ public class LinhAPI {
   // }
 
   @GetMapping(value = "/hai")
-  public String show(String s) {
-    return (Integer.parseInt(s) + 1) + "";
+  public HaizukaOutput showHaizuka(@RequestParam("page") int page, @RequestParam("limit") int limit) {
+    HaizukaOutput haizukaOutput = new HaizukaOutput();
+    haizukaOutput.setPage(page);
+    Pageable pageable = PageRequest.of(page - 1, limit);
+
+    haizukaOutput.setListResult(haizukaService.findAll(pageable));
+    haizukaOutput.setTotalPage((int)(Math.ceil((double)haizukaService.totalItem() / limit)));
+    return haizukaOutput;
   }
 
   @GetMapping(value = "/linh")
